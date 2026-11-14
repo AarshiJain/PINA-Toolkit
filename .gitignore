@@ -1,0 +1,7 @@
+dist/server/
+dist/.openai/
+.env
+.env.*
+exports/
+node_modules/
+.DS_Store

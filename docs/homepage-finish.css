@@ -1,0 +1,89 @@
+/* One quiet selected state, equal control heights, and no dimmed tools. */
+.v3-home .v3-composer{text-align:left}
+.v3-home .v3-compose-row{justify-content:flex-start!important;gap:12px;align-items:center;flex-wrap:wrap}
+.v3-home .v3-compose-row>div:first-child{flex:0 1 230px}
+.v3-home .v3-compose-row>.v6-start-actions{display:flex;flex:0 0 auto;align-items:center;gap:8px;margin-left:0}
+.v3-home .type-picker{width:100%}
+.v3-home .type-picker select,.v3-home .v6-start-actions>.ink-button{height:46px;min-height:46px;box-sizing:border-box;font:400 13px/1.5 Inter,Arial,sans-serif!important;padding:10px 14px!important;margin:0!important;border-radius:4px}
+.v3-home .type-picker select{width:100%;max-width:none;border:1px solid #b8c8b0;background:#fffef9}
+.v3-home .v6-start-actions>.ink-button{gap:16px}
+.v3-home .v6-attach{display:grid;place-items:center;width:44px;height:46px;padding:11px;border:1px solid #b8c8b0;border-radius:4px;background:#fffef9}
+.v6-attach svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
+.v3-home .v3-composer :is(textarea,select):focus,.v3-home .v3-composer :is(textarea,select):focus-visible,.chat3-panel :is(textarea,select,input):focus-visible{outline:none!important;border-color:#171717!important;box-shadow:inset 0 0 0 1px #171717!important;background:#fffef9!important}
+.v4-header nav>a,.v4-header nav>button,.v4-header .v4-tool-nav>button,.v4-header nav .v5-reset-toolkit{display:flex;align-items:center;min-height:44px;padding:12px 0;font:400 14px/1.5 Inter,Arial,sans-serif!important;color:#171717!important;opacity:1;gap:7px}
+.v2-route-other,.story-chapters.pip-filtered .story-tool:not(.pip-recommended),.pip-filtered .reply:not(.pip-recommended){opacity:1!important;filter:none!important;background:#fffefb}
+.pip-filtered .reply:not(.pip-recommended) .tool-illustration{opacity:1!important;filter:none!important}
+.chat3-panel>header button[data-chat-close]{width:38px!important;min-width:38px!important;height:38px!important;padding:10px!important}
+/* Both the paper and the scene hold still while the reader considers a tool. */
+#story-traveler{position:fixed;transition:none!important;animation:none!important;transform-origin:50% 55%}
+#story-traveler[hidden]{display:none!important}
+#story-traveler .pip,#story-traveler .pip-body,#story-traveler .story-traveler-figure{animation:none!important;transition:none!important}
+#story-traveler.is-waving .story-traveler-figure{animation:story-wave .85s ease-in-out!important}
+.carry-comparison{transform-box:fill-box;transform-origin:center;transform:scale(var(--carry-card-scale,1))}
+.story-scene-svg .scene-main-paper,.story-scene-svg .scene-cloud{transform:none!important;transition:none!important}
+.story-chapter[data-story-chapter="2"] .message-original,.story-chapter[data-story-chapter="2"] .message-reply{opacity:var(--message-arrival,0)!important;transform:scale(calc(.8 + var(--message-arrival,0)*.2))!important;transform-box:fill-box;transform-origin:center;transition:none!important}
+.story-chapter[data-story-chapter="2"] .message-links{opacity:var(--message-arrival,0)}
+.story-chapter[data-story-chapter="2"] .message-gap{transform:none!important;animation:none!important}
+.story-chapter[data-story-chapter="1"] .analysis-magnifier{transform:translate(calc((var(--scene-progress,.5) - .4)*22px),calc((.5 - var(--scene-progress,.5))*12px));transition:none}
+.story-home .story-chapter-nav{top:var(--site-header,78px)}
+.story-home .story-illustration-col{top:calc(var(--site-header,78px) + 80px)}
+@media(max-width:850px){.v4-header nav>a,.v4-header nav>button,.v4-header .v4-tool-nav>button,.v4-header nav .v5-reset-toolkit{font-size:11px!important}.v3-home .v3-compose-row>div:first-child{flex-basis:210px}.v3-home .v3-compose-row>.v6-start-actions{margin-left:0}.chat3-panel>header button[data-chat-close]{min-width:38px!important}}
+@media(max-width:620px){.v3-home .v3-compose-row{display:grid!important;grid-template-columns:1fr}.v3-home .v3-compose-row>div:first-child{display:block;width:100%}.v3-home .v3-compose-row>.v6-start-actions{display:grid;grid-template-columns:44px minmax(0,1fr);width:100%}.v3-home .type-picker select{height:46px}.story-home .story-chapter-nav{height:55px}.story-home .story-illustration-col{top:auto}}
+@media(prefers-reduced-motion:reduce){.story-chapter[data-story-chapter="2"] .message-original,.story-chapter[data-story-chapter="2"] .message-reply,.story-chapter[data-story-chapter="2"] .message-links{opacity:1!important;transform:none!important}}
+
+body:has(.story-home) #pip-layer>.chat3-launcher{display:flex!important}
+/* A reserved mobile scene keeps the guide above, rather than on top of, the tool cards. */
+@media(max-width:620px){
+ .story-home .story-chapter{display:block;padding-top:20px}
+ .story-home .story-illustration-col{position:sticky!important;top:calc(var(--site-header,69px) + 55px)!important;height:260px;max-width:none;width:100%;z-index:6;background:#f8f6ef;padding:8px 0 12px;margin:0}
+ .story-home .story-scene{max-width:278px;margin:0 auto!important}
+ .story-home .story-scene-svg{height:240px;max-height:240px}
+ .story-home .story-chapter-copy{margin-top:28px}
+ #story-traveler{z-index:7}
+}
+.v3-home .v3-compose-row .type-picker select{height:46px!important;min-height:46px!important}
+@media(min-width:621px){.v3-home .v6-start-actions>.ink-button{width:230px}}
+
+/* Give short topics the same reading pause as the longer evidence chapter. */
+@media(min-width:621px){
+ .story-home .story-chapter:not([data-story-chapter="1"]){min-height:max(1160px,calc(100dvh + 360px))}
+ .story-home .story-chapter[data-story-chapter="3"] .story-chapter-copy,.story-home .story-chapter[data-story-chapter="4"] .story-chapter-copy{position:sticky;top:calc(var(--site-header,78px) + 80px)}
+}
+@media(min-width:621px){.story-home .story-chapter:not([data-story-chapter="1"]) .story-illustration-col{margin-top:-76px}}
+
+/* The outer story position is the only motion source. Mascots do not bob or shake. */
+.pip .pip-body{animation:none!important;transition:none!important;transform:none!important}
+#story-traveler.is-waving .story-traveler-figure{animation:none!important;transform:none!important}
+#story-traveler.is-docked{will-change:auto}
+
+/* One permanently composed layer; no parent handoffs or scroll-time resizing. */
+#story-traveler[data-motion-engine="native-scroll"]{will-change:transform;transform-origin:0 0}
+
+/* Keep the complete resting artwork below navigation on short desktop windows. */
+@media(min-width:621px){.story-home .story-scene-svg{max-height:max(240px,calc(100dvh - var(--site-header,78px) - 180px))}}
+
+/* Compact tabs, then a distinct breathing space before the tool's title and tags. */
+.v4-tool-page{grid-template-rows:44px 126px minmax(0,1fr) auto}
+.v4-tool-page>.v3-tool-tabs{height:44px;align-items:flex-start}
+.v4-tool-page>.v3-tool-tabs>a{height:38px;padding:8px 0 6px;align-items:center}
+.v4-tool-heading{padding:28px 0 24px}
+.v4-tool-heading h1{margin-bottom:12px}
+/* The picker and clip stay together; the primary action has a clear right edge. */
+.v3-home .v3-compose-row{justify-content:space-between!important;flex-wrap:nowrap}
+.v3-home .v3-compose-row>div:first-child{flex:0 1 auto;display:flex;flex-direction:row;flex-wrap:nowrap;align-items:center;gap:8px;width:auto}
+.v3-home .v3-compose-row .type-picker{width:230px;flex:0 1 230px;min-width:0}
+.v3-home .v3-compose-row .v6-attach{flex:0 0 44px}
+.v3-home .v3-compose-row>.v6-start-button{margin:0 0 0 auto!important;height:46px!important;min-height:46px!important;font:400 13px/1.5 Inter,Arial,sans-serif!important;padding:10px 14px!important;border-radius:4px;white-space:nowrap}
+.v3-home #v3-material:focus,.v3-home #v3-material:focus-visible{outline:none!important;border:0!important;box-shadow:none!important;background:transparent!important}
+/* Identical boxed controls in Ask Pip and the homepage composer. */
+.chat3-panel>header button[data-chat-settings]{display:grid;place-items:center;flex:none;width:38px;height:38px;padding:6px;border:1px solid #c1cdb8;border-radius:5px;font:400 21px/1 Inter,Arial,sans-serif;color:#171717;background:#fffef9}
+.chat3-panel>header button[data-chat-settings]:hover{border-color:#171717}
+.chat3-compose>div{gap:8px;align-items:center}
+.chat3-compose>div>.v6-attach{display:grid;place-items:center;flex:0 0 40px;width:40px;height:40px;padding:9px;border:1px solid #b8c8b0;border-radius:4px;background:#fffef9;color:#171717}
+.chat3-compose .v6-attach svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
+.chat3-compose .type-picker{flex:1;min-width:0}
+.chat3-compose .type-picker select{height:40px;min-height:40px;width:100%;max-width:none;border:1px solid #b8c8b0;border-radius:4px;padding:8px 22px 8px 10px;background:#fffef9;font:400 12px/1.5 Inter,Arial,sans-serif;text-align:left}
+.chat3-compose .type-picker select:focus{outline:none!important;border-color:#171717;box-shadow:inset 0 0 0 1px #171717}
+.chat3-compose .ink-button{height:40px;min-height:40px;padding:8px 13px;font:400 12px/1.5 Inter,Arial,sans-serif}
+@media(max-width:850px){.v4-tool-heading{padding:28px 0 26px;min-height:0}.v4-tool-page>.v3-tool-tabs{height:44px}.v4-tool-heading h1{margin-bottom:12px}}
+@media(max-width:620px){.v3-home .v3-compose-row{display:flex!important;flex-wrap:wrap;gap:12px!important}.v3-home .v3-compose-row>div:first-child{width:100%;flex:1 1 100%}.v3-home .v3-compose-row .type-picker{width:auto;flex:1}.v3-home .v3-compose-row>.v6-start-button{width:100%;justify-content:center}.v4-tool-page>.v3-tool-tabs{gap:18px}}

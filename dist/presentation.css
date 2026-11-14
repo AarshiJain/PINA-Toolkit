@@ -1,0 +1,11 @@
+/* A clean screenshot view. Scrolling and the normal website remain available. */
+html.presentation-capture,
+.presentation-capture * {
+  scrollbar-width: none !important;
+  -ms-overflow-style: none !important;
+  cursor: none !important;
+}
+html.presentation-capture::-webkit-scrollbar,
+.presentation-capture *::-webkit-scrollbar { display: none !important; width: 0 !important; height: 0 !important; }
+.presentation-capture *, .presentation-capture *::before, .presentation-capture *::after { animation: none !important; transition: none !important; }
+.presentation-capture #toast { display: none !important; }

@@ -1,0 +1,30 @@
+/* Notebook spacing is the reference for all collection introductions. */
+.collection-page{max-width:1030px!important;margin:50px auto 0!important;padding:0 0 65px!important}
+.collection-page>.collection-head>h1{font-size:clamp(38px,4.5vw,65px);line-height:1.08;letter-spacing:-.04em;margin:0 0 12px!important}
+.collection-page>.collection-head>p:not(.eyebrow){font-size:15px;line-height:1.65;max-width:700px;margin:0!important}
+.collection-page>.collection-head>.eyebrow{margin:0 0 18px!important}
+.collection-page>.collection-head>.notebook-actions{display:flex;align-items:center;justify-content:space-between;gap:15px;margin:28px 0 40px!important}
+.collection-page>.collection-head>.notebook-actions>.ink-button{min-height:50px;padding:13px 20px;font-size:13px}
+.collection-back{margin:0 0 24px}
+.collection-page .v2-shelf-tools{margin:0 0 48px}
+.collection-page>h2{font-size:28px;line-height:1.3;margin:40px 0 24px}
+.collection-page .v2-bibliography{grid-template-columns:repeat(3,minmax(0,1fr));gap:24px}
+.collection-page .source-card{display:flex;gap:18px;padding:20px 0;border-top:1px solid #becdb5;align-items:start;min-width:0}
+.collection-page .source-card>div{min-width:0}
+.collection-page .source-card h3{font-size:15px;line-height:1.5;letter-spacing:0;margin:0 0 8px}
+.collection-page .source-card p{font-size:12px;line-height:1.6;margin:0}
+.collection-page .source-card .text-link{font-size:11px;margin-top:14px}
+.book-cover{display:flex;align-items:start;justify-content:center;width:100px;min-width:100px;height:150px;line-height:0}
+.book-cover img{width:auto;max-width:100%;height:auto;max-height:150px;object-fit:contain;object-position:top;box-shadow:3px 4px 8px #263d2518}
+.collection-page .other-bibliography{grid-template-columns:repeat(3,minmax(0,1fr))}
+.collection-page>.casebook-cards{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:24px}
+.casebook-cards>article{padding:28px!important}
+.casebook-cards>article>.eyebrow{margin:0 0 16px}
+.casebook-cards>article>h2{font-size:28px;line-height:1.2;margin:0}
+.casebook-tool-links{margin-top:24px;display:grid;gap:12px}
+.casebook-cards .casebook-tool-links>a{display:flex;align-items:center;justify-content:space-between;gap:16px;margin:0!important;font-size:12px;line-height:1.6}
+.casebook-tool-links .icon{width:16px;height:16px}
+.v3-home .v3-compose-row .type-picker select{text-align:center;text-align-last:center;padding-inline:14px 32px!important}
+@media(max-width:1000px){.collection-page .v2-bibliography{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:700px){.collection-page{margin-top:32px!important}.collection-page>.collection-head>p:not(.eyebrow){font-size:14px}.collection-page>.collection-head>.notebook-actions{margin:25px 0 31px!important}.collection-page>.collection-head>.notebook-actions>.ink-button{font-size:12px;min-height:44px;padding:10px 14px}.collection-page>.casebook-cards,.collection-page .other-bibliography{grid-template-columns:1fr}.collection-page .v2-bibliography{gap:16px}.casebook-cards>article{padding:24px!important}}
+@media(max-width:480px){.collection-page .book-bibliography{grid-template-columns:1fr}.book-cover{width:90px;min-width:90px;height:135px}.book-cover img{max-height:135px}.collection-page .source-card{gap:20px}}

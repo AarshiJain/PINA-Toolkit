@@ -1,0 +1,7 @@
+CREATE TABLE pip_invites (
+  vault_id TEXT PRIMARY KEY NOT NULL,
+  token_hash TEXT NOT NULL UNIQUE,
+  payload TEXT NOT NULL,
+  budget_day INTEGER NOT NULL DEFAULT 0,
+  requests INTEGER NOT NULL DEFAULT 0
+);

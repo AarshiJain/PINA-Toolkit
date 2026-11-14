@@ -1,0 +1,99 @@
+.pip-launcher {
+  position:fixed;right:22px;bottom:20px;z-index:65;display:flex;align-items:center;gap:7px;
+  min-height:46px;padding:4px 14px 4px 7px;border:1px solid #607e6b;border-radius:8px;
+  background:#e5eee3;color:#171717;box-shadow:2px 3px 0 #597062;font:700 15px/1.2 system-ui;cursor:pointer
+}
+.pip-launcher .pip {width:29px;height:34px;margin:0}
+.pip-launcher[aria-expanded=true] {background:#fffef9}
+.pip-panel {
+  position:fixed;z-index:66;right:22px;bottom:79px;display:flex;flex-direction:column;
+  width:min(438px,calc(100vw - 28px));max-height:min(760px,calc(100dvh - 104px));
+  border:1px solid #8ca295;border-radius:10px;background:#fffef9;color:#171717;box-shadow:0 9px 32px #253b2d25;overflow:hidden
+}
+.pip-panel[hidden] {display:none}
+.pip-panel-head {display:flex;align-items:center;justify-content:space-between;gap:12px;padding:8px 13px;border-bottom:1px solid #c9d6cc;background:#edf2e9}
+.pip-panel-head>div {display:flex;align-items:center;gap:5px}
+.pip-panel-head .pip {width:37px;height:44px;margin:0}
+.pip-panel-head .eyebrow {margin:0 0 3px;font-size:10px}
+.pip-panel-head h2 {margin:0;font-size:21px;line-height:1.2}
+.pip-panel-head .round-button {width:34px;height:34px;display:grid;place-items:center;padding:6px}
+.pip-panel-head .icon {width:18px;height:18px}
+.pip-head-actions .round-button[aria-pressed=true] {background:#d6e5d8;border-color:#607e6b}
+.pip-sharing {margin:12px 0;padding:10px 0;border-top:1px solid #c9d6cc}
+.pip-sharing h3 {margin:0 0 6px}
+.pip-goals button {
+  font:inherit;font-size:13px;line-height:1.25;border:1px solid #9db1a1;
+  border-radius:5px;background:#fffef9;color:#171717;padding:6px 9px;cursor:pointer;text-align:left
+}
+.pip-goals button[aria-pressed=true] {border-color:#171717;box-shadow:inset 0 0 0 1px #171717}
+.pip-panel-content {overflow-y:auto;overscroll-behavior:contain;padding:12px 14px 15px;font-size:14px;line-height:1.5;scrollbar-gutter:stable}
+.pip-panel-content p {margin:0 0 8px;overflow-wrap:anywhere}
+.pip-intro {border-left:2px solid #93af9b;padding-left:9px}
+.pip-connect {display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:10px;padding:8px;border:1px solid #c7d5ca;border-radius:5px;background:#f1f5ee}
+.pip-connect button {flex:none}
+.pip-form,.pip-answers {display:grid;gap:6px}
+.pip-form>label,.pip-form details label {font-weight:700}
+.pip-form :is(input:not([type=checkbox]):not([type=file]),textarea,select) {
+  width:100%;min-width:0;min-height:34px;padding:7px 8px;border:1px solid #9db1a1;border-radius:4px;background:#fffef9;color:#171717;font:inherit
+}
+.pip-form :is(input,textarea,select):focus-visible {outline:none;border-color:#171717;box-shadow:inset 0 0 0 1px #171717}
+.pip-form textarea {resize:vertical}
+.pip-upload {display:flex;align-items:center;gap:8px;flex-wrap:wrap;overflow-wrap:anywhere}
+.pip-upload label {cursor:pointer;text-decoration:underline;text-underline-offset:3px}
+.pip-upload input[type=file] {position:absolute;width:1px;height:1px;overflow:hidden;opacity:0}
+.pip-upload:has(input:focus-visible) label {outline:2px solid #171717;outline-offset:2px}
+.pip-goals {border:0;padding:0;margin:4px 0;min-width:0}
+.pip-goals legend {font-weight:700;margin-bottom:5px}
+.pip-goals>div {display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:5px}
+.pip-actions {display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:4px 0}
+.pip-panel-content .ink-button {font-size:13px;line-height:1.2;padding:7px 10px;min-height:33px}
+.pip-panel-content .ink-button:disabled {opacity:.55;cursor:not-allowed}
+.pip-panel-content .text-link {font-size:13px}
+.pip-shortcut {justify-self:start}
+.pip-check {display:flex;align-items:baseline;gap:6px;font-size:13px}
+.pip-check input {accent-color:#456c56}
+.pip-form details {margin:3px 0;font-size:13px}
+.pip-form details summary {cursor:pointer}
+.pip-form details label {display:block;margin-top:6px}
+.pip-note {color:#4b5851;font-size:12px}
+.pip-feedback:empty {display:none}
+.pip-feedback p {padding:7px 8px;border-radius:4px}
+.pip-error {background:#f9e8e4;color:#762c22}
+.pip-notice {background:#e7efe4}
+.pip-result {margin-top:12px;padding-top:10px;border-top:1px solid #c9d6cc}
+.pip-result .eyebrow {margin-bottom:5px}
+.pip-reply {white-space:pre-line}
+.pip-followup {padding:7px 9px;border-left:2px solid #8da898;background:#eff4ec}
+.pip-card {padding:8px;margin:5px 0;border:1px solid #a7b9ab;border-radius:5px}
+.pip-tag {font-size:10px;font-weight:750;color:#42594b}
+.pip-card h3,.pip-answers h3 {font-size:15px;margin:0 0 4px}
+.pip-card p {margin:2px 0 6px;white-space:pre-wrap}
+.pip-card .text-link {margin-left:4px}
+.pip-quote {margin:4px 0 7px;padding-left:7px;border-left:2px solid #9db1a1;font-size:12px;color:#43564a;overflow-wrap:anywhere}
+.pip-quote b {display:block}
+.pip-next {margin:8px 0;padding-left:18px}
+.pip-answers {margin:8px 0}
+.pip-project-button {margin-right:6px}
+#app [data-pip-badge] {display:block;color:#385844!important;font-size:11px;font-weight:700;margin-top:5px}
+#app [data-pip-badge]:empty {display:none}
+.pip-filtered .reply:not(.pip-recommended) .tool-illustration {filter:grayscale(.85);opacity:.55}
+.pip-filtered .reply:not(.pip-recommended) {background:#f4f3ed}
+.pip-filtered .reply.pip-recommended {border-color:#55785f;box-shadow:inset 0 0 0 1px #55785f;background:#f1f6ee}
+.pip-directory-status {display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:9px}
+.pip-directory-status[hidden] {display:none}
+body:has(.make-page,.map-page) .pip-launcher {bottom:83px}
+body:has(.make-page,.map-page) .pip-panel {bottom:140px;max-height:calc(100dvh - 157px)}
+@media(max-width:850px) {
+  body:has(.make-page) .pip-launcher {bottom:128px}
+  body:has(.make-page) .pip-panel {bottom:182px;max-height:calc(100dvh - 194px)}
+}
+@media(max-width:620px) {
+  .pip-launcher {right:12px;bottom:12px}
+  .pip-panel {right:10px;bottom:68px;max-height:calc(100dvh - 82px)}
+  .pip-panel-content {padding:10px}
+}
+@media print {#pip-layer {display:none!important}}
+.pip-answers :is(input[type=number],textarea,select) {
+  display:block;width:100%;margin:3px 0 6px;padding:6px 8px;border:1px solid #9db1a1;border-radius:4px;background:#fffef9;color:#171717;font:inherit
+}
+.pip-answers textarea {resize:vertical}
