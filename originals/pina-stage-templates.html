@@ -1,0 +1,896 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>PINA Stage Templates</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Public+Sans:wght@400;500;600&family=JetBrains+Mono:wght@500&display=swap">
+<style>
+/* Layout: one long workbook. Each stage = a visual canvas you fill in, cobalt = what we mean, amber = how it is read. */
+:root{
+  --paper:#F4F6FA; --card:#FFFFFF; --ink:#13203A; --muted:#58657F; --line:#D3DAE7;
+  --meant:#2747D9; --meant-soft:#E3E8FC; --read:#C97A12; --read-soft:#FBEEDB;
+  --third:#13866F; --third-soft:#DDF2EC; --deep:#E4EAF6; --deeper:#CFD9EE; --netflix:#C8102E;
+  --f-display:"Bricolage Grotesque", "Avenir Next", system-ui, sans-serif;
+  --f-body:"Public Sans", "Segoe UI", system-ui, sans-serif;
+  --f-mono:"JetBrains Mono", ui-monospace, Menlo, monospace;
+  --r:14px;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --paper:#0E1421; --card:#151D2E; --ink:#E7ECF6; --muted:#97A2BA; --line:#2A3551;
+  --meant:#7F95FF; --meant-soft:#1D2750; --read:#F0A848; --read-soft:#3A2A14;
+  --third:#4CC8A6; --third-soft:#123A33; --deep:#17213A; --deeper:#1E2B4A; --netflix:#FF5468; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --paper:#0E1421; --card:#151D2E; --ink:#E7ECF6; --muted:#97A2BA; --line:#2A3551;
+  --meant:#7F95FF; --meant-soft:#1D2750; --read:#F0A848; --read-soft:#3A2A14;
+  --third:#4CC8A6; --third-soft:#123A33; --deep:#17213A; --deeper:#1E2B4A; --netflix:#FF5468; color-scheme:dark}
+
+*{box-sizing:border-box}
+body{background:var(--paper);color:var(--ink);font-family:var(--f-body);font-size:16px;line-height:1.55;
+  padding-left:max(16px, env(safe-area-inset-left, 0px));padding-right:max(16px, env(safe-area-inset-right, 0px));}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top, 0px);z-index:10;background:var(--paper)}
+.wrap{max-width:1080px;margin:0 auto}
+h1,h2,h3{font-family:var(--f-display);text-wrap:balance;margin:0;letter-spacing:-0.01em}
+h2{font-size:clamp(28px,4vw,40px);line-height:1.05;font-weight:800}
+h3{font-size:19px;font-weight:700}
+p{margin:0}
+.eyebrow{font-family:var(--f-mono);font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.meant{color:var(--meant)} .read{color:var(--read)}
+.sr{position:absolute!important;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.spectrum label:not(.sr){display:none}
+button{font:inherit;cursor:pointer}
+:focus-visible{outline:2px solid var(--meant);outline-offset:2px}
+
+/* nav */
+nav.top{position:sticky;top:env(safe-area-inset-top, 0px);z-index:9;background:color-mix(in srgb, var(--paper) 88%, transparent);backdrop-filter:blur(8px);border-bottom:1px solid var(--line);margin:0 calc(-1 * max(16px, env(safe-area-inset-left, 0px)))}
+nav.top .wrap{display:flex;gap:6px;align-items:center;overflow-x:auto;padding:10px max(16px, env(safe-area-inset-left, 0px));scrollbar-width:none}
+nav.top a{flex:none;text-decoration:none;color:var(--muted);font-size:13px;font-weight:600;padding:6px 10px;border-radius:999px;border:1px solid transparent;white-space:nowrap}
+nav.top a:hover{color:var(--ink);border-color:var(--line)}
+nav.top a b{font-family:var(--f-mono);font-weight:500;color:var(--meant);margin-right:4px}
+
+/* hero */
+header.hero{padding-block:48px 28px;display:grid;grid-template-columns:1.1fr 1fr;gap:40px;align-items:center}
+.hero h1{font-size:clamp(40px,6.4vw,76px);line-height:.95;font-weight:800}
+.hero h1 span{display:block}
+.hero .lede{margin-top:18px;max-width:52ch;color:var(--muted);font-size:17px}
+.gapcard{background:var(--card);border:1px solid var(--line);border-radius:22px;padding:22px;position:relative;min-width:0}
+.gapcard .stmt{font-family:var(--f-display);font-size:clamp(22px,2.6vw,28px);line-height:1.15;font-weight:700;margin:10px 0 18px;min-height:2.3em}
+.toggle{display:inline-flex;border:1px solid var(--line);border-radius:999px;padding:3px;gap:2px;background:var(--paper)}
+.toggle button{border:0;background:none;padding:6px 14px;border-radius:999px;font-size:13px;font-weight:600;color:var(--muted)}
+.toggle button[aria-pressed="true"].m{background:var(--meant);color:#fff}
+.toggle button[aria-pressed="true"].r{background:var(--read);color:#1a1205}
+.reading{margin-top:14px;padding:14px 16px;border-radius:12px;font-size:15px;transition:background .25s}
+.reading.m{background:var(--meant-soft)} .reading.r{background:var(--read-soft)}
+.reading .who{font-family:var(--f-mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;display:block;margin-bottom:4px}
+.gapcard .foot{display:flex;justify-content:space-between;align-items:center;margin-top:16px;gap:10px;flex-wrap:wrap}
+.ghost{border:1px solid var(--line);background:none;color:var(--ink);padding:7px 12px;border-radius:999px;font-size:13px;font-weight:600}
+.ghost:hover{border-color:var(--ink)}
+.nf{font-family:var(--f-mono);font-size:11px;color:var(--netflix);letter-spacing:.06em;text-transform:uppercase}
+
+/* chain */
+.chain{display:grid;grid-template-columns:repeat(6,1fr);gap:0;margin:8px 0 56px;border:1px solid var(--line);border-radius:var(--r);overflow:hidden;background:var(--card)}
+.chain a{display:block;text-decoration:none;color:inherit;padding:16px 14px;border-right:1px solid var(--line);position:relative}
+.chain a:last-child{border-right:0}
+.chain a:hover{background:var(--meant-soft)}
+.chain .n{font-family:var(--f-mono);font-size:12px;color:var(--meant)}
+.chain .t{font-family:var(--f-display);font-weight:700;font-size:16px;line-height:1.15;margin:4px 0 8px}
+.chain .h{font-size:12.5px;color:var(--muted)}
+.chain a:not(:last-child)::after{content:"";position:absolute;right:-7px;top:50%;width:12px;height:12px;background:var(--card);border-top:1px solid var(--line);border-right:1px solid var(--line);transform:translateY(-50%) rotate(45deg);z-index:1}
+
+/* stage section */
+section.stage{padding-block:56px;border-top:1px solid var(--line)}
+.stage-head{display:grid;grid-template-columns:auto 1fr;gap:6px 22px;align-items:end;margin-bottom:28px}
+.stage-num{font-family:var(--f-display);font-weight:800;font-size:clamp(64px,9vw,112px);line-height:.8;color:var(--meant);grid-row:span 2}
+.stage-head .idea{grid-column:2;color:var(--muted);max-width:62ch;font-size:16.5px}
+.uses{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+.chip{font-family:var(--f-mono);font-size:11.5px;padding:4px 9px;border-radius:999px;border:1px solid var(--line);color:var(--muted);background:var(--card)}
+.bar{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin:0 0 16px}
+.bar .solid{border:0;background:var(--ink);color:var(--paper);padding:8px 14px;border-radius:999px;font-size:13px;font-weight:600}
+.bar .solid.nfb{background:var(--netflix);color:#fff}
+.canvas{background:var(--card);border:1px solid var(--line);border-radius:22px;padding:22px;min-width:0}
+.two{display:grid;grid-template-columns:1.25fr 1fr;gap:18px;align-items:start}
+.two > *{min-width:0}
+
+/* fields */
+.field{display:flex;flex-direction:column;gap:4px;min-width:0}
+.field label{font-family:var(--f-mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.field label em{font-style:normal;color:var(--ink);font-family:var(--f-body);text-transform:none;letter-spacing:0;font-size:13px;font-weight:600;display:block;margin-top:2px}
+textarea,input[type=text]{font:inherit;font-size:15px;color:var(--ink);background:transparent;border:0;border-bottom:1.5px dashed var(--line);padding:4px 0 6px;resize:none;width:100%;field-sizing:content;min-height:2.1em}
+textarea:focus,input[type=text]:focus{outline:none;border-bottom-color:var(--meant);border-bottom-style:solid}
+
+/* output sentence */
+.output{margin-top:18px;border-radius:16px;padding:18px 20px;background:var(--ink);color:var(--paper);font-family:var(--f-display);font-size:clamp(17px,2vw,21px);line-height:1.4;font-weight:500}
+.output .lab{display:block;font-family:var(--f-mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;opacity:.65;margin-bottom:8px;font-weight:500}
+.output span[data-out]{border-bottom:2px solid color-mix(in srgb, var(--paper) 45%, transparent);font-weight:700}
+.output span.empty{opacity:.5;font-weight:500;font-style:italic}
+
+/* netflix lesson + research */
+.lesson{border-left:3px solid var(--netflix);padding:4px 0 4px 16px;font-size:15px}
+.lesson p+p{margin-top:8px}
+details.research{margin-top:16px;border-top:1px solid var(--line);padding-top:12px}
+details.research summary{cursor:pointer;font-size:13px;font-weight:600;color:var(--muted);list-style:none}
+details.research summary::before{content:"+ ";font-family:var(--f-mono);color:var(--meant)}
+details[open].research summary::before{content:"\2212 "}
+details.research p{margin-top:8px;font-size:14px;color:var(--muted);max-width:70ch}
+.bridge{margin-top:22px;display:flex;align-items:center;gap:12px;font-size:14.5px}
+.bridge .arrow{font-family:var(--f-mono);color:var(--meant);border:1px solid var(--meant);border-radius:999px;padding:3px 10px;font-size:12px;white-space:nowrap}
+.side{display:flex;flex-direction:column;gap:16px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:18px}
+.card h3{margin-bottom:8px}
+
+/* master: reading spectrum */
+.spectrum{display:grid;grid-template-columns:repeat(3,1fr);gap:0;margin-top:16px;border-radius:16px;overflow:hidden;border:1px solid var(--line)}
+.spectrum .band{padding:16px;display:flex;flex-direction:column;gap:6px}
+.spectrum .band:nth-child(1){background:var(--meant-soft)}
+.spectrum .band:nth-child(2){background:color-mix(in srgb, var(--meant-soft) 50%, var(--read-soft))}
+.spectrum .band:nth-child(3){background:var(--read-soft)}
+.spectrum h4{margin:0;font-size:14px;font-family:var(--f-display)}
+.closers{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+.closers label{display:flex;align-items:center;gap:8px;border:1px solid var(--line);border-radius:999px;padding:7px 12px;font-size:14px;cursor:pointer;background:var(--card)}
+.closers input{accent-color:var(--meant)}
+.ledger{margin-top:20px;overflow-x:auto}
+.ledger table{border-collapse:collapse;width:100%;min-width:760px;font-size:14px}
+.ledger th{font-family:var(--f-mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);text-align:left;padding:8px;border-bottom:1.5px solid var(--ink);font-weight:500}
+.ledger td{padding:4px 8px;border-bottom:1px solid var(--line);vertical-align:top}
+.ledger td textarea{font-size:14px;border-bottom:0}
+.ledger th:nth-child(2){color:var(--meant)} .ledger th:nth-child(3){color:var(--read)}
+
+/* stage 1 iceberg */
+.berg{border-radius:20px;overflow:hidden;border:1px solid var(--line);position:relative}
+.berg .above{padding:20px 20px 10px;background:var(--card);display:grid;grid-template-columns:repeat(3,1fr);gap:16px;position:relative}
+.berg .wave{display:block;width:100%;height:28px;background:var(--card)}
+.berg .wave path{fill:var(--deep)}
+.berg .below{background:linear-gradient(var(--deep),var(--deeper));padding:8px 20px 20px;display:grid;grid-template-columns:repeat(2,1fr);gap:16px 22px;position:relative}
+.berg .zone{font-family:var(--f-mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;grid-column:1/-1;color:var(--muted)}
+.berg .core{grid-column:1/-1;background:var(--card);border-radius:14px;padding:14px 16px;border:1.5px solid var(--meant)}
+.berg .core label{color:var(--meant)}
+.berg svg.ice{position:absolute;right:-30px;bottom:-20px;width:300px;opacity:.5;pointer-events:none}
+.berg .ice path{fill:var(--card)}
+
+/* stage 2 argument map */
+.argmap{display:grid;grid-template-columns:1fr 64px 1.2fr;grid-template-rows:auto auto auto;gap:12px 0;align-items:center}
+.node{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:14px;min-width:0}
+.node.claim{border:2px solid var(--meant);background:var(--meant-soft);grid-column:3;grid-row:2}
+.node.grounds{grid-column:1;grid-row:2}
+.node.warrant{grid-column:1/4;grid-row:1;justify-self:center;width:min(100%,420px);border-style:dashed}
+.node.rival{grid-column:1/4;grid-row:3;border:2px solid var(--read);background:var(--read-soft)}
+.argmap .link{grid-column:2;grid-row:2;height:2px;background:var(--ink);position:relative}
+.argmap .link::after{content:"";position:absolute;right:0;top:-5px;border-left:10px solid var(--ink);border-top:6px solid transparent;border-bottom:6px solid transparent}
+.frame-line{display:flex;flex-wrap:wrap;align-items:baseline;gap:6px;font-family:var(--f-display);font-size:17px;font-weight:700}
+.frame-line input{flex:1 1 140px;font-family:var(--f-body);font-weight:500}
+.quals{display:flex;gap:6px;margin-top:10px;flex-wrap:wrap}
+.quals button{border:1px solid var(--line);background:var(--card);border-radius:999px;padding:4px 10px;font-size:12.5px;color:var(--muted)}
+.quals button[aria-pressed="true"]{background:var(--meant);border-color:var(--meant);color:#fff}
+.floor{display:flex;gap:14px;align-items:flex-start}
+.floor .who{flex:none;width:44px;height:44px;border-radius:50%;display:grid;place-items:center;background:var(--third-soft);color:var(--third);font-family:var(--f-mono);font-size:12px;font-weight:500}
+
+/* stage 3 ladder */
+.ladderwrap{display:grid;grid-template-columns:200px 1fr;gap:18px;align-items:center}
+.ladder svg{width:100%;height:auto;display:block}
+.ladder .rail{stroke:var(--ink);stroke-width:3;stroke-linecap:round}
+.ladder .rung{stroke:var(--ink);stroke-width:2.5;stroke-linecap:round}
+.ladder .rl{fill:var(--muted);font-family:var(--f-mono);font-size:11px}
+.ladder .dot{fill:var(--meant)} .ladder .dl{fill:#fff;font-family:var(--f-mono);font-size:11px;font-weight:500}
+.finding{display:grid;grid-template-columns:28px 1fr;gap:4px 10px;align-items:start;padding:10px 0;border-bottom:1px solid var(--line)}
+.finding .tag{font-family:var(--f-mono);font-size:12px;color:#fff;background:var(--meant);border-radius:8px;text-align:center;padding:3px 0;margin-top:4px}
+.rungs{grid-column:2;display:flex;gap:4px;flex-wrap:wrap}
+.rungs button{border:1px solid var(--line);background:var(--card);border-radius:8px;padding:3px 8px;font-size:12px;color:var(--muted)}
+.rungs button[aria-pressed="true"]{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.slips{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:16px}
+.slip{border:1px solid var(--line);border-radius:14px;padding:12px;display:flex;gap:10px;cursor:pointer;background:var(--card);align-items:flex-start}
+.slip input{margin-top:4px;accent-color:var(--third)}
+.slip b{display:block;font-size:14px}
+.slip small{color:var(--muted);font-size:13px;display:block;line-height:1.4}
+.slip:has(input:checked){border-color:var(--third);background:var(--third-soft)}
+
+/* stage 4 thread */
+.thread svg{width:100%;height:auto;display:block}
+.thread .seg{fill:none;stroke-width:3.5;stroke-linecap:round}
+.thread .seg.ok{stroke:var(--meant)}
+.thread .seg.broken{stroke:var(--read);stroke-dasharray:6 8}
+.thread .pin{stroke-width:3}
+.thread .pin.ok{fill:var(--meant);stroke:var(--meant)}
+.thread .pin.no{fill:var(--card);stroke:var(--read)}
+.thread .pl{fill:var(--ink);font-family:var(--f-body);font-size:13px;font-weight:600}
+.checks{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-top:6px}
+.checkcol{display:flex;flex-direction:column;gap:6px;min-width:0}
+.checkcol .ck{display:flex;gap:6px;align-items:center;font-size:12.5px;color:var(--muted);cursor:pointer}
+.checkcol .ck input{accent-color:var(--meant)}
+.compare{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:18px}
+.bubble{border-radius:16px;padding:14px;position:relative}
+.bubble.a{background:var(--meant-soft)} .bubble.b{background:var(--read-soft)}
+
+/* stage 5 loop */
+.loopwrap{display:grid;grid-template-columns:320px 1fr;gap:20px;align-items:center}
+.loop svg{width:100%;height:auto;display:block}
+.loop .ring{fill:none;stroke:var(--line);stroke-width:2}
+.loop .ring-arrow{fill:var(--muted)}
+.loop .ln{cursor:pointer}
+.loop .ln circle{fill:var(--card);stroke:var(--ink);stroke-width:1.5;transition:fill .2s}
+.loop .ln text{fill:var(--ink);font-family:var(--f-mono);font-size:13px;font-weight:500;pointer-events:none}
+.loop .ln.on circle{fill:var(--third);stroke:var(--third)}
+.loop .ln.on text{fill:#fff}
+.loop .ll{fill:var(--ink);font-family:var(--f-body);font-size:12px;font-weight:600;pointer-events:none}
+.loop .center{fill:var(--muted);font-family:var(--f-display);font-size:15px;font-weight:700}
+.say{border-left:3px solid var(--third);padding-left:14px}
+.say .q{font-family:var(--f-display);font-size:20px;font-weight:700;line-height:1.25;margin:6px 0 8px}
+.flip{perspective:900px;cursor:pointer;height:150px}
+.flip .inner{position:relative;width:100%;height:100%;transition:transform .5s;transform-style:preserve-3d}
+.flip.on .inner{transform:rotateY(180deg)}
+.flip .face{position:absolute;inset:0;backface-visibility:hidden;border-radius:16px;padding:18px;display:flex;flex-direction:column;justify-content:space-between}
+.flip .front{background:var(--read-soft)}
+.flip .back{background:var(--meant-soft);transform:rotateY(180deg)}
+.flip .big{font-family:var(--f-display);font-size:24px;font-weight:800;line-height:1.1}
+.quad{display:grid;grid-template-columns:1fr 1fr;gap:0;border:1px solid var(--line);border-radius:16px;overflow:hidden;margin-top:16px}
+.quad .field{padding:14px;border-right:1px solid var(--line);border-bottom:1px solid var(--line)}
+.quad .field:nth-child(2n){border-right:0}
+.quad .field:nth-child(n+3){border-bottom:0}
+
+/* stage 6 radar */
+.radarwrap{display:grid;grid-template-columns:300px 1fr;gap:22px;align-items:center}
+.radar svg{width:100%;height:auto;display:block}
+.radar .grid{fill:none;stroke:var(--line);stroke-width:1}
+.radar .axis{stroke:var(--line)}
+.radar .shape{fill:var(--meant);fill-opacity:.18;stroke:var(--meant);stroke-width:2.5}
+.radar .vd{fill:var(--meant)}
+.radar .weak{fill:var(--read)}
+.radar .al{fill:var(--ink);font-family:var(--f-body);font-size:12.5px;font-weight:600}
+.sl{display:grid;grid-template-columns:110px 1fr 22px;gap:10px;align-items:center;padding:6px 0}
+.sl label{font-weight:600;font-size:14px}
+.sl small{grid-column:1/-1;color:var(--muted);font-size:12.5px;margin-top:-6px}
+.sl input{accent-color:var(--meant);width:100%}
+.sl output{font-family:var(--f-mono);font-size:13px;text-align:right}
+.tip{margin-top:12px;background:var(--read-soft);border-radius:12px;padding:12px 14px;font-size:14px}
+.walk{margin-top:18px;position:relative;height:56px;border-radius:12px;background:linear-gradient(90deg,var(--read-soft),var(--meant-soft));overflow:hidden}
+.walk .mark{position:absolute;top:0;bottom:0;width:2px;background:var(--ink)}
+.walk .ml{position:absolute;top:8px;font-family:var(--f-mono);font-size:11px;letter-spacing:.04em;text-transform:uppercase;white-space:nowrap}
+.walk .zl{position:absolute;bottom:8px;font-size:12.5px;font-weight:600}
+
+/* venn */
+.venn svg{width:100%;max-width:560px;height:auto;display:block;margin:0 auto}
+.venn .c{stroke-width:2}
+.venn .ca{fill:var(--meant);fill-opacity:.1;stroke:var(--meant)}
+.venn .cj{fill:var(--read);fill-opacity:.12;stroke:var(--read)}
+.venn .cc{fill:var(--third);fill-opacity:.1;stroke:var(--third)}
+.venn .vl{font-family:var(--f-display);font-size:18px;font-weight:800}
+.venn .vs{font-family:var(--f-body);font-size:12px;fill:var(--muted)}
+.venn .b circle{fill:var(--ink)} .venn .b text{fill:var(--paper);font-family:var(--f-mono);font-size:13px;font-weight:500}
+.venn .core{fill:var(--card);stroke:var(--ink);stroke-width:1.5}
+.venn .coret{fill:var(--ink);font-family:var(--f-mono);font-size:10.5px;font-weight:500}
+.legend{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:18px}
+.legend .card b{font-family:var(--f-mono);font-size:12px;margin-right:4px}
+
+.sources{font-size:13.5px;color:var(--muted);columns:2;column-gap:32px}
+.sources li{margin-bottom:6px;break-inside:avoid}
+footer{padding-block:32px 56px;color:var(--muted);font-size:13px}
+
+@media (max-width:860px){
+  header.hero,.two,.ladderwrap,.loopwrap,.radarwrap{grid-template-columns:1fr}
+  .chain{grid-template-columns:repeat(3,1fr)} .chain a:nth-child(3){border-right:0} .chain a:nth-child(-n+3){border-bottom:1px solid var(--line)}
+  .chain a::after{display:none}
+  .checks{grid-template-columns:repeat(2,1fr)}
+  .slips,.legend{grid-template-columns:1fr}
+  .ladder,.loop,.radar{max-width:320px;margin:0 auto}
+  .sources{columns:1}
+}
+@media (max-width:560px){
+  .chain{grid-template-columns:1fr 1fr} .chain a{border-right:1px solid var(--line)!important;border-bottom:1px solid var(--line)} .chain a:nth-child(2n){border-right:0!important}
+  .berg .above,.berg .below,.spectrum,.compare,.quad{grid-template-columns:1fr}
+  .quad .field{border-right:0!important;border-bottom:1px solid var(--line)!important}
+  .argmap{grid-template-columns:1fr} .argmap .link{display:none}
+  .node.claim,.node.grounds,.node.warrant,.node.rival{grid-column:1;grid-row:auto}
+  .stage-head{grid-template-columns:1fr} .stage-num{grid-row:auto} .stage-head .idea{grid-column:1}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+
+<nav class="top" aria-label="Stages">
+  <div class="wrap">
+    <a href="#reading-check"><b>00</b>Reading Check</a>
+    <a href="#stage-1"><b>01</b>Brief X-Ray</a>
+    <a href="#stage-2"><b>02</b>Frame Test</a>
+    <a href="#stage-3"><b>03</b>Evidence Ladder</a>
+    <a href="#stage-4"><b>04</b>Thread Check</a>
+    <a href="#stage-5"><b>05</b>Reasoned Review</a>
+    <a href="#stage-6"><b>06</b>Value Case</a>
+    <a href="#connect"><b>&#8734;</b>How it connects</a>
+  </div>
+</nav>
+
+<div class="wrap">
+
+<header class="hero">
+  <div>
+    <p class="eyebrow">PINA Toolkit · Stage templates</p>
+    <h1><span class="meant">What we mean</span><span class="read">is not what</span><span>they read.</span></h1>
+    <p class="lede">Six working templates for design managers, one for each stage of a consultancy project. Each one combines persuasion, influence, negotiation and argumentation tools into a single way of thinking, built on published research and tested against four Netflix cases.</p>
+  </div>
+  <div class="gapcard" aria-live="polite">
+    <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap">
+      <span class="nf" id="gapYear">Netflix · 2015</span>
+      <div class="toggle" role="group" aria-label="Choose a reading">
+        <button class="m" id="tgM" aria-pressed="true">What Netflix meant</button>
+        <button class="r" id="tgR" aria-pressed="false">How people read it</button>
+      </div>
+    </div>
+    <p class="stmt" id="gapStmt">"No advertising coming onto Netflix. Period."</p>
+    <div class="reading m" id="gapReading"><span class="who meant">Meant</span><span id="gapText">We have no plans for ads right now.</span></div>
+    <div class="foot">
+      <span class="eyebrow">The interpretation gap, in one line</span>
+      <button class="ghost" id="gapNext">Next statement &#8594;</button>
+    </div>
+  </div>
+</header>
+
+<div class="chain" aria-label="The six stages">
+  <a href="#stage-1"><div class="n">01</div><div class="t">Brief X-Ray</div><div class="h">Hands on the reframe</div></a>
+  <a href="#stage-2"><div class="n">02</div><div class="t">Frame Test</div><div class="h">Hands on the rival frame</div></a>
+  <a href="#stage-3"><div class="n">03</div><div class="t">Evidence Ladder</div><div class="h">Hands on the recommendation</div></a>
+  <a href="#stage-4"><div class="n">04</div><div class="t">Thread Check</div><div class="h">Hands on the review criteria</div></a>
+  <a href="#stage-5"><div class="n">05</div><div class="t">Reasoned Review</div><div class="h">Hands on the handover note</div></a>
+  <a href="#stage-6"><div class="n">06</div><div class="t">Value Case</div><div class="h">Protects time to frame</div></a>
+</div>
+
+<!-- MASTER TOOL -->
+<section class="stage" id="reading-check">
+  <div class="stage-head">
+    <div class="stage-num">00</div>
+    <h2>The Reading Check</h2>
+    <p class="idea">Use it at every stage, any time you write, say or decide something others will interpret. Thirty seconds, three moves.</p>
+  </div>
+  <div class="bar">
+    <button class="solid nfb" data-example="s0">Load the Netflix example</button>
+    <button class="ghost" data-clear="s0">Clear</button>
+  </div>
+  <div class="canvas">
+    <div class="field">
+      <label for="s0_mean">Move 1 <em>What do I mean? One plain sentence.</em></label>
+      <textarea id="s0_mean" data-k="s0_mean" rows="1"></textarea>
+    </div>
+    <p class="eyebrow" style="margin-top:20px">Move 2 · How could it be read?</p>
+    <div class="spectrum">
+      <div class="band field"><h4 class="meant">As I intended</h4><label for="s0_r1" class="sr">Intended reading</label><textarea id="s0_r1" data-k="s0_r1" rows="2"></textarea></div>
+      <div class="band field"><h4>Partly: accept some, resist some</h4><label for="s0_r2">Negotiated reading</label><textarea id="s0_r2" data-k="s0_r2" rows="2"></textarea></div>
+      <div class="band field"><h4 class="read">Against me: the worst fair reading</h4><label for="s0_r3">Oppositional reading</label><textarea id="s0_r3" data-k="s0_r3" rows="2"></textarea></div>
+    </div>
+    <p class="eyebrow" style="margin-top:20px">Move 3 · What closes the gap? Pick what you'll do.</p>
+    <div class="closers">
+      <label><input type="checkbox" id="s0_c1" data-k="s0_c1"> Give the reason</label>
+      <label><input type="checkbox" id="s0_c2" data-k="s0_c2"> Say it first</label>
+      <label><input type="checkbox" id="s0_c3" data-k="s0_c3"> Name the cost</label>
+    </div>
+
+    <p class="eyebrow" style="margin-top:28px">The Framing Ledger · one row per framing decision, filled in as you go</p>
+    <div class="ledger">
+      <table>
+        <thead><tr><th>Decision</th><th>What we mean</th><th>Other readings</th><th>Evidence</th><th>Who decided</th><th>How we'll know it was right</th></tr></thead>
+        <tbody id="ledgerBody"></tbody>
+      </table>
+    </div>
+    <div class="bar" style="margin-top:10px"><button class="ghost" id="addRow">Add a row</button></div>
+
+    <details class="research"><summary>The research behind it</summary>
+      <p>Stuart Hall (1973) showed that a sender encodes a message and an audience decodes it, and the two never fully match. He named three readings: the intended one, a negotiated one and an oppositional one. Karl Weick (1995) showed that teams make meaning together through sensemaking, and Gioia and Chittipeddi (1991) showed that leaders shape that meaning through sensegiving. The three gap-closers are your midterm fixes: reason with the rule, say it first, name the cost.</p>
+    </details>
+  </div>
+</section>
+
+<!-- STAGE 1 -->
+<section class="stage" id="stage-1">
+  <div class="stage-head">
+    <div class="stage-num">01</div>
+    <h2>The Brief X-Ray</h2>
+    <p class="idea">A brief is a request, not a problem. Look under the surface before you agree to solve it.</p>
+  </div>
+  <div class="uses"><span class="chip">Critical thinking</span><span class="chip">Anchoring</span><span class="chip">Interests vs. positions</span><span class="chip">Empathy</span><span class="chip">Use when: receiving and scoping a brief</span></div>
+  <div class="bar" style="margin-top:16px">
+    <button class="solid nfb" data-example="s1">Load the Netflix example</button>
+    <button class="ghost" data-clear="s1">Clear</button>
+  </div>
+  <div class="two">
+    <div>
+      <div class="berg">
+        <div class="above">
+          <span class="zone">Above the surface · what the brief says</span>
+          <div class="field"><label for="s1_fact">Facts <em>What does it state as true?</em></label><textarea id="s1_fact" data-k="s1_fact" rows="2"></textarea></div>
+          <div class="field"><label for="s1_anchor">The anchor <em>What solution is already written in?</em></label><textarea id="s1_anchor" data-k="s1_anchor" rows="2"></textarea></div>
+          <div class="field"><label for="s1_position">The position <em>What are they asking for?</em></label><textarea id="s1_position" data-k="s1_position" rows="2"></textarea></div>
+        </div>
+        <svg class="wave" viewBox="0 0 600 28" preserveAspectRatio="none" aria-hidden="true"><path d="M0 14 C 50 0, 100 28, 150 14 S 250 0, 300 14 S 400 28, 450 14 S 550 0, 600 14 V28 H0Z"/></svg>
+        <div class="below">
+          <svg class="ice" viewBox="0 0 300 260" aria-hidden="true"><path d="M60 0 L240 0 L290 90 L250 200 L150 258 L40 210 L10 100 Z"/></svg>
+          <span class="zone">Below the surface · what it hides</span>
+          <div class="field"><label for="s1_assume">Assumptions <em>What does it take for granted?</em></label><textarea id="s1_assume" data-k="s1_assume" rows="2"></textarea></div>
+          <div class="field"><label for="s1_opposite">The opposite option <em>What does the anchor hide?</em></label><textarea id="s1_opposite" data-k="s1_opposite" rows="2"></textarea></div>
+          <div class="field"><label for="s1_interest">The interest <em>Why do they want it?</em></label><textarea id="s1_interest" data-k="s1_interest" rows="2"></textarea></div>
+          <div class="field"><label for="s1_people">People affected <em>Who else does this touch?</em></label><textarea id="s1_people" data-k="s1_people" rows="2"></textarea></div>
+          <div class="field" style="grid-column:1/-1"><label for="s1_loss">What they could lose</label><textarea id="s1_loss" data-k="s1_loss" rows="1"></textarea></div>
+          <div class="core field"><label for="s1_reframe">At the bottom · the real problem may be</label><textarea id="s1_reframe" data-k="s1_reframe" rows="2"></textarea></div>
+        </div>
+      </div>
+      <div class="output"><span class="lab">Your reframe, assembled</span>
+        The client asked for <span data-out="s1_position" data-ph="the position"></span> because <span data-out="s1_interest" data-ph="the interest"></span>. The brief assumes <span data-out="s1_assume" data-ph="an assumption"></span>. It also affects <span data-out="s1_people" data-ph="these people"></span>, who could lose <span data-out="s1_loss" data-ph="something"></span>. So the real problem may be <span data-out="s1_reframe" data-ph="the reframe"></span>.
+      </div>
+    </div>
+    <div class="side">
+      <div class="card">
+        <h3>How it worked on Netflix</h3>
+        <div class="lesson">
+          <p>Netflix answered the position, "stop password sharing," and got compliance: 5.9 million members added in one quarter.</p>
+          <p>It never answered the losses. Families heard "Love is sharing a password" in 2017 and were billed for it in 2023. That is the <b>absent viewer</b>.</p>
+        </div>
+      </div>
+      <div class="card">
+        <h3>Activity: flip the anchor</h3>
+        <p style="font-size:15px">Read the brief's solution out loud. Then say its opposite. If the opposite sounds absurd, the anchor is probably doing your thinking for you.</p>
+      </div>
+      <details class="research card"><summary>The research behind it</summary>
+        <p>Donald Schön (1983): problem setting comes before problem solving. Wedell-Wedellsborg (2017): teams solve the wrong problem when they skip reframing. Tversky and Kahneman (1974): first ideas anchor judgment; Mussweiler, Strack and Pfeiffer (2000): considering the opposite weakens the anchor. Fisher and Ury (1981) and Malhotra and Bazerman (2007): asking why behind a position reveals the interest.</p>
+      </details>
+    </div>
+  </div>
+  <div class="bridge"><span class="arrow">to 02</span> Your reframe becomes the claim the team tests next.</div>
+</section>
+
+<!-- STAGE 2 -->
+<section class="stage" id="stage-2">
+  <div class="stage-head">
+    <div class="stage-num">02</div>
+    <h2>The Frame Test</h2>
+    <p class="idea">A frame is a best guess about the problem. Map it like an argument and test it out loud before anyone builds on it.</p>
+  </div>
+  <div class="uses"><span class="chip">Argumentation</span><span class="chip">Abductive reasoning</span><span class="chip">Framing</span><span class="chip">Trust</span><span class="chip">Use when: sharing the brief, exploring</span></div>
+  <div class="bar" style="margin-top:16px">
+    <button class="solid nfb" data-example="s2">Load the Netflix example</button>
+    <button class="ghost" data-clear="s2">Clear</button>
+  </div>
+  <div class="two">
+    <div class="canvas">
+      <div class="argmap">
+        <div class="node warrant field"><label for="s2_warrant">Warrant <em>Why does that evidence point here?</em></label><textarea id="s2_warrant" data-k="s2_warrant" rows="1"></textarea></div>
+        <div class="node grounds field"><label for="s2_grounds">Grounds <em>What evidence makes it believable?</em></label><textarea id="s2_grounds" data-k="s2_grounds" rows="3"></textarea></div>
+        <div class="link" aria-hidden="true"></div>
+        <div class="node claim">
+          <span class="eyebrow meant">The frame (your claim)</span>
+          <div class="frame-line" style="margin-top:6px">If we see this as <input type="text" id="s2_see" data-k="s2_see" aria-label="If we see this as"></div>
+          <div class="frame-line">then we should <input type="text" id="s2_then" data-k="s2_then" aria-label="then we should"></div>
+          <div class="quals" role="group" aria-label="How sure are we">
+            <button data-qual="Certain">Certain</button><button data-qual="Likely">Likely</button><button data-qual="Best guess">Best guess</button>
+          </div>
+        </div>
+        <div class="node rival field"><label for="s2_rival" class="read">Rival frame <em>The strongest different reading, worded as fairly as your own</em></label><textarea id="s2_rival" data-k="s2_rival" rows="2"></textarea></div>
+      </div>
+      <div class="floor" style="margin-top:20px">
+        <div class="who">JR</div>
+        <div class="field" style="flex:1"><label for="s2_wrong">Least senior person speaks first <em>"What would make this frame wrong?"</em></label><textarea id="s2_wrong" data-k="s2_wrong" rows="2"></textarea></div>
+      </div>
+    </div>
+    <div class="side">
+      <div class="card">
+        <h3>How it worked on Netflix</h3>
+        <div class="lesson">
+          <p>Inside Netflix, artwork personalization was framed as helping members find a show in one second.</p>
+          <p>The rival frame, "Netflix is choosing what I see without telling me," is what viewers landed on in 2018, when some felt targeted by race. Testing the rival early points straight to your fix: say it first, with a "Picked for you" label.</p>
+        </div>
+      </div>
+      <div class="card">
+        <h3>Activity: steelman swap</h3>
+        <p style="font-size:15px">Two people argue each other's frame for two minutes. Whoever can state the rival frame best earns the right to reject it.</p>
+      </div>
+      <details class="research card"><summary>The research behind it</summary>
+        <p>Kees Dorst (2011, 2015): design framing as "if we look at the problem as X, then Y should work," a form of abduction. Stephen Toulmin (1958): an argument has a claim, grounds, warrant, qualifier and rebuttal. Tversky and Kahneman (1981): wording changes choices. Amy Edmondson (1999): teams learn only when people feel safe to question, which decides whether a junior can challenge a frame.</p>
+      </details>
+    </div>
+  </div>
+  <div class="bridge"><span class="arrow">to 03</span> The rival frame becomes the thing your research has to check.</div>
+</section>
+
+<!-- STAGE 3 -->
+<section class="stage" id="stage-3">
+  <div class="stage-head">
+    <div class="stage-num">03</div>
+    <h2>The Evidence Ladder</h2>
+    <p class="idea">A recommendation is only as strong as the highest rung under it. Place your findings, check your logic, then speak to the future.</p>
+  </div>
+  <div class="uses"><span class="chip">Evidence</span><span class="chip">Bad logic</span><span class="chip">Confirmation bias</span><span class="chip">Rhetoric</span><span class="chip">Use when: researching, recommending</span></div>
+  <div class="bar" style="margin-top:16px">
+    <button class="solid nfb" data-example="s3">Load the Netflix example</button>
+    <button class="ghost" data-clear="s3">Clear</button>
+  </div>
+  <div class="canvas">
+    <div class="ladderwrap">
+      <div class="ladder"><svg viewBox="0 0 220 330" role="img" aria-label="Evidence ladder with your findings placed on rungs" id="ladderSvg"></svg></div>
+      <div>
+        <div class="finding"><span class="tag">F1</span><div class="field"><label for="s3_f1" class="sr">Finding 1</label><textarea id="s3_f1" data-k="s3_f1" rows="1" placeholder="A finding"></textarea></div><div class="rungs" data-rungs="1"></div></div>
+        <div class="finding"><span class="tag">F2</span><div class="field"><label for="s3_f2" class="sr">Finding 2</label><textarea id="s3_f2" data-k="s3_f2" rows="1" placeholder="A finding"></textarea></div><div class="rungs" data-rungs="2"></div></div>
+        <div class="finding"><span class="tag">F3</span><div class="field"><label for="s3_f3" class="sr">Finding 3</label><textarea id="s3_f3" data-k="s3_f3" rows="1" placeholder="A finding"></textarea></div><div class="rungs" data-rungs="3"></div></div>
+      </div>
+    </div>
+    <p class="eyebrow" style="margin-top:22px">Logic check · tick each once you've ruled it out</p>
+    <div class="slips">
+      <label class="slip"><input type="checkbox" data-k="s3_l1"><span><b>Hasty generalization</b><small>Are five interviews, or one AI summary, standing in for everyone?</small></span></label>
+      <label class="slip"><input type="checkbox" data-k="s3_l2"><span><b>False cause</b><small>Did A cause B, or did they just happen together?</small></span></label>
+      <label class="slip"><input type="checkbox" data-k="s3_l3"><span><b>False dilemma</b><small>Are there really only two options?</small></span></label>
+    </div>
+    <div class="field" style="margin-top:20px"><label for="s3_pre" class="read">Premortem <em>It's a year later and this recommendation failed. Why?</em></label><textarea id="s3_pre" data-k="s3_pre" rows="2"></textarea></div>
+    <div class="two" style="margin-top:16px">
+      <div class="field"><label for="s3_act">We recommend</label><textarea id="s3_act" data-k="s3_act" rows="1"></textarea></div>
+      <div class="field"><label for="s3_gain">So that the audience gains</label><textarea id="s3_gain" data-k="s3_gain" rows="1"></textarea></div>
+      <div class="field"><label for="s3_gap">We are less sure about</label><textarea id="s3_gap" data-k="s3_gap" rows="1"></textarea></div>
+      <div class="field"><label for="s3_change">We'd change our minds if</label><textarea id="s3_change" data-k="s3_change" rows="1"></textarea></div>
+    </div>
+    <div class="output"><span class="lab">Your recommendation, answer first</span>
+      We recommend <span data-out="s3_act" data-ph="an action"></span> so that <span data-out="s3_gain" data-ph="the audience gains"></span>. Our strongest evidence is <span data-out="s3_best" data-ph="your highest rung"></span>. We are less sure about <span data-out="s3_gap" data-ph="a gap"></span>. We would change our minds if <span data-out="s3_change" data-ph="a condition"></span>.
+    </div>
+  </div>
+  <div class="two" style="margin-top:18px">
+    <div class="card">
+      <h3>How it worked on Netflix</h3>
+      <div class="lesson">
+        <p>A Jefferies survey said 62% would quit rather than pay (rung 2). Pilots and real sign-ups said otherwise (rungs 3 and 4). What people did beat what they said.</p>
+        <p>The evidence was strong. The gap: Netflix gave the forward-looking reason, "it hurts our ability to invest in shows," to investors and not to viewers.</p>
+      </div>
+    </div>
+    <details class="research card"><summary>The research behind it</summary>
+      <p>From class: evidence that raises trust is tangible, documented and hard to dispute. Research on the say-do gap shows stated intentions are weaker than observed behavior. Gary Klein (2007): the premortem reduces overconfidence. Jay Heinrichs (Thank You for Arguing): future-focused, "deliberative" talk moves decisions. Barbara Minto: answer first. Petty and Cacioppo (1986): engaged audiences weigh arguments, busy ones lean on cues.</p>
+    </details>
+  </div>
+  <div class="bridge"><span class="arrow">to 04</span> The recommendation becomes the thread the deliverable must carry.</div>
+</section>
+
+<!-- STAGE 4 -->
+<section class="stage" id="stage-4">
+  <div class="stage-head">
+    <div class="stage-num">04</div>
+    <h2>The Thread Check</h2>
+    <p class="idea">When a concept becomes a product, the reason behind it often disappears. Follow the thread through five pins. Every unchecked pin is a break.</p>
+  </div>
+  <div class="uses"><span class="chip">Visual rhetoric</span><span class="chip">Storytelling</span><span class="chip">Commitment and consistency</span><span class="chip">Use when: the concept turns into the product</span></div>
+  <div class="bar" style="margin-top:16px">
+    <button class="solid nfb" data-example="s4">Load the Netflix example</button>
+    <button class="ghost" data-clear="s4">Clear</button>
+  </div>
+  <div class="canvas">
+    <div class="field"><label for="s4_thread">The thread <em>Copy your recommendation from Stage 3, in one line</em></label><textarea id="s4_thread" data-k="s4_thread" rows="1"></textarea></div>
+    <div class="thread" style="margin-top:12px"><svg viewBox="0 0 700 120" role="img" aria-label="The thread, solid where checks pass and broken where they fail" id="threadSvg"></svg></div>
+    <div class="checks">
+      <div class="checkcol"><label class="ck"><input type="checkbox" data-k="s4_c1"> Restated</label><small style="color:var(--muted);font-size:12.5px">Can the team say it in one line?</small></div>
+      <div class="checkcol"><label class="ck"><input type="checkbox" data-k="s4_c2"> Visible</label><label for="s4_where" class="sr">Where</label><textarea id="s4_where" data-k="s4_where" rows="1" placeholder="Where can you point to it?"></textarea></div>
+      <div class="checkcol"><label class="ck"><input type="checkbox" data-k="s4_c3"> Stranger agrees</label><small style="color:var(--muted);font-size:12.5px">Matches what an outsider says it's for</small></div>
+      <div class="checkcol"><label class="ck"><input type="checkbox" data-k="s4_c4"> Picture first</label><small style="color:var(--muted);font-size:12.5px">The main visual carries it before words</small></div>
+      <div class="checkcol"><label class="ck"><input type="checkbox" data-k="s4_c5"> Past yes</label><label for="s4_yes" class="sr">Past yes</label><textarea id="s4_yes" data-k="s4_yes" rows="1" placeholder="What did they already agree to?"></textarea></div>
+    </div>
+    <div class="compare">
+      <div class="bubble a field"><span class="eyebrow meant">What we built it for</span><p id="s4_echo" style="font-weight:600"></p></div>
+      <div class="bubble b field"><label for="s4_stranger" class="read">What a stranger said it's for</label><textarea id="s4_stranger" data-k="s4_stranger" rows="2"></textarea></div>
+    </div>
+  </div>
+  <div class="two" style="margin-top:18px">
+    <div class="card">
+      <h3>How it worked on Netflix</h3>
+      <div class="lesson">
+        <p>Netflix artwork is visual rhetoric at its purest: one image, one second, no words. The thread was "help each viewer find a show they'll enjoy."</p>
+        <p>It broke when some images showed a minor character as if they were the lead. Measuring the watch, not the click, protected the business but not the meaning.</p>
+      </div>
+    </div>
+    <details class="research card"><summary>The research behind it</summary>
+      <p>From class: visual rhetoric puts emotional, symbolic images first, with little or no text. Kurnoff and Lazarus (Everyday Business Storytelling): data and visuals land when tied to a clear story for a specific audience. Robert Cialdini (Influence): once people commit, they want to stay consistent. Stuart Hall's readings explain why an outsider reads the work differently.</p>
+    </details>
+  </div>
+  <div class="bridge"><span class="arrow">to 05</span> The thread becomes the criteria the review judges against.</div>
+</section>
+
+<!-- STAGE 5 -->
+<section class="stage" id="stage-5">
+  <div class="stage-head">
+    <div class="stage-num">05</div>
+    <h2>The Reasoned Review</h2>
+    <p class="idea">Review the reasoning, not just the look. Hand over the reasons, not just the files. Every review is a lesson in judgment for whoever is newest.</p>
+  </div>
+  <div class="uses"><span class="chip">Argumentation</span><span class="chip">Principled negotiation</span><span class="chip">Hanlon's Razor</span><span class="chip">Coaching</span><span class="chip">Use when: reviewing, giving feedback, handing over</span></div>
+  <div class="canvas" style="margin-top:16px">
+    <div class="loopwrap">
+      <div class="loop"><svg viewBox="0 0 320 320" role="img" aria-label="The review loop, five moves" id="loopSvg"></svg></div>
+      <div class="say" id="sayBox" aria-live="polite"></div>
+    </div>
+  </div>
+  <div class="bar" style="margin-top:18px">
+    <button class="solid nfb" data-example="s5">Load the Netflix example</button>
+    <button class="ghost" data-clear="s5">Clear</button>
+  </div>
+  <div class="two">
+    <div class="canvas">
+      <h3>The handover note</h3>
+      <div class="quad">
+        <div class="field"><label for="s5_dec">What we decided</label><textarea id="s5_dec" data-k="s5_dec" rows="2"></textarea></div>
+        <div class="field"><label for="s5_why">Why</label><textarea id="s5_why" data-k="s5_why" rows="2"></textarea></div>
+        <div class="field"><label for="s5_not">What we chose not to do, and why</label><textarea id="s5_not" data-k="s5_not" rows="2"></textarea></div>
+        <div class="field"><label for="s5_open">Open questions</label><textarea id="s5_open" data-k="s5_open" rows="2"></textarea></div>
+      </div>
+    </div>
+    <div class="side">
+      <div class="card">
+        <h3>Activity: Hanlon's flip</h3>
+        <p style="font-size:14px;color:var(--muted);margin-bottom:10px">When the next team gets it wrong, read the card, then tap to flip.</p>
+        <div class="flip" id="flip" role="button" tabindex="0" aria-pressed="false" aria-label="Flip the Hanlon's Razor card">
+          <div class="inner">
+            <div class="face front"><span class="eyebrow read">The first thought</span><span class="big">"They didn't care."</span><span style="font-size:13px">Tap to flip</span></div>
+            <div class="face back"><span class="eyebrow meant">The better first question</span><span class="big">"What didn't they know?"</span><span style="font-size:13px">Then fix the record, not the person.</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <h3>How it worked on Netflix</h3>
+        <div class="lesson">
+          <p>Two reversals, paid sharing and ads, and zero acknowledgements. The reasons existed but never reached viewers, so viewers decided for themselves: "They meant it."</p>
+          <p>Silence doesn't leave people undecided. It decides for them.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <details class="research card" style="margin-top:18px"><summary>The research behind it</summary>
+    <p>Collins, Brown and Newman (1989), cognitive apprenticeship: experts teach judgment by modeling their thinking out loud, coaching, and asking learners to articulate and reflect. Fisher and Ury (1981): separate the people from the problem and judge by objective criteria. Patrik Meyer (The 4 Pillars of Critical Thinking): Hanlon's Razor. Edmondson (1999): people speak up only when it feels safe.</p>
+  </details>
+  <div class="bridge"><span class="arrow">to 06</span> The handover note becomes your evidence of what the thinking was worth.</div>
+</section>
+
+<!-- STAGE 6 -->
+<section class="stage" id="stage-6">
+  <div class="stage-head">
+    <div class="stage-num">06</div>
+    <h2>The Value Case</h2>
+    <p class="idea">When AI makes production fast, hours stop being a fair measure. Price the thinking, and treat that new model as an innovation you have to pitch.</p>
+  </div>
+  <div class="uses"><span class="chip">Innovation pitch</span><span class="chip">Value negotiation</span><span class="chip">Reciprocity</span><span class="chip">Trust</span><span class="chip">Use when: billing, renewing, pricing</span></div>
+  <div class="bar" style="margin-top:16px">
+    <button class="solid" data-example="s6">Load a studio example</button>
+    <button class="ghost" data-clear="s6">Clear</button>
+  </div>
+  <div class="canvas">
+    <p class="eyebrow">Will they adopt it? Score your pitch on Rogers' five questions</p>
+    <div class="radarwrap" style="margin-top:10px">
+      <div class="radar"><svg viewBox="0 0 300 300" role="img" aria-label="Adoption radar for your pitch" id="radarSvg"></svg></div>
+      <div>
+        <div class="sl"><label for="s6_a1">Advantage</label><input type="range" min="1" max="5" id="s6_a1" data-k="s6_a1"><output id="o_a1"></output><small>Why is paying for outcomes better than paying for hours?</small></div>
+        <div class="sl"><label for="s6_a2">Fit</label><input type="range" min="1" max="5" id="s6_a2" data-k="s6_a2"><output id="o_a2"></output><small>Does it match how this client already buys?</small></div>
+        <div class="sl"><label for="s6_a3">Simplicity</label><input type="range" min="1" max="5" id="s6_a3" data-k="s6_a3"><output id="o_a3"></output><small>Can you explain it in one sentence?</small></div>
+        <div class="sl"><label for="s6_a4">Trial</label><input type="range" min="1" max="5" id="s6_a4" data-k="s6_a4"><output id="o_a4"></output><small>Is there a small piece they can try first?</small></div>
+        <div class="sl"><label for="s6_a5">Visibility</label><input type="range" min="1" max="5" id="s6_a5" data-k="s6_a5"><output id="o_a5"></output><small>Will they see the result?</small></div>
+        <div class="tip" id="radarTip"></div>
+      </div>
+    </div>
+    <p class="eyebrow" style="margin-top:24px">Know your walk-away before you talk price</p>
+    <div class="walk" aria-hidden="true">
+      <div class="mark" style="left:38%"></div>
+      <span class="ml" style="left:calc(38% + 8px)">Your walk-away</span>
+      <span class="zl" style="left:12px">Decline</span>
+      <span class="zl" style="right:12px">Room to create value</span>
+    </div>
+    <div class="two" style="margin-top:14px">
+      <div class="field"><label for="s6_walk">Our walk-away <em>Below this, we say no</em></label><textarea id="s6_walk" data-k="s6_walk" rows="1"></textarea></div>
+      <div class="field"><label for="s6_more">More than price on the table <em>Scope, timing, outcomes, ownership</em></label><textarea id="s6_more" data-k="s6_more" rows="1"></textarea></div>
+      <div class="field"><label for="s6_out">You're paying for</label><textarea id="s6_out" data-k="s6_out" rows="1"></textarea></div>
+      <div class="field"><label for="s6_hours">Not for</label><textarea id="s6_hours" data-k="s6_hours" rows="1"></textarea></div>
+      <div class="field"><label for="s6_got">You've already received</label><textarea id="s6_got" data-k="s6_got" rows="1"></textarea></div>
+      <div class="field"><label for="s6_trial">Start with</label><textarea id="s6_trial" data-k="s6_trial" rows="1"></textarea></div>
+      <div class="field" style="grid-column:1/-1"><label for="s6_measure">You'll see it in</label><textarea id="s6_measure" data-k="s6_measure" rows="1"></textarea></div>
+    </div>
+    <div class="output"><span class="lab">Your value case</span>
+      You're paying for <span data-out="s6_out" data-ph="an outcome"></span>, not <span data-out="s6_hours" data-ph="hours"></span>. You've already received <span data-out="s6_got" data-ph="proof"></span>. Start with <span data-out="s6_trial" data-ph="a small trial"></span>, and you'll see it in <span data-out="s6_measure" data-ph="a measure"></span>.
+    </div>
+  </div>
+  <div class="two" style="margin-top:18px">
+    <div class="card">
+      <h3>How it worked on Netflix</h3>
+      <div class="lesson">
+        <p>In the Warner Bros. bid, the co-CEOs called the deal "a nice to have at the right price, not a must have at any price." Knowing the walk-away was the argument.</p>
+        <p>Your "name the cost" fix adds reciprocity: give something back so the value conversation feels fair. Check the deal figures against your sources before using them.</p>
+      </div>
+    </div>
+    <details class="research card"><summary>The research behind it</summary>
+      <p>Everett Rogers (1962): people adopt something new when they see advantage, fit, simplicity, a way to try it and visible results. Malhotra and Bazerman (Negotiation Genius): know your BATNA, and put several issues on the table to create value. Cialdini (Influence): people want to return what they've received. Aristotle's ethos, via Heinrichs: credibility comes from track record.</p>
+    </details>
+  </div>
+</section>
+
+<!-- CONNECT -->
+<section class="stage" id="connect">
+  <div class="stage-head">
+    <div class="stage-num">&#8734;</div>
+    <h2>How it connects to the thesis</h2>
+    <p class="idea">The templates sit across the three gaps. Where circles overlap, one template closes two gaps at once. The Framing Ledger sits at the center because every gap depends on reasons being written down.</p>
+  </div>
+  <div class="canvas venn">
+    <svg viewBox="0 0 520 420" role="img" aria-label="Venn diagram of the authority, judgment and capability gaps with the stages placed in them">
+      <circle class="c ca" cx="200" cy="160" r="120"/>
+      <circle class="c cj" cx="320" cy="160" r="120"/>
+      <circle class="c cc" cx="260" cy="265" r="120"/>
+      <text class="vl" x="70" y="40" fill="var(--meant)">Authority</text><text class="vs" x="70" y="58">Who can question and decide?</text>
+      <text class="vl" x="360" y="40" fill="var(--read)">Judgment</text><text class="vs" x="360" y="58">Which reading wins?</text>
+      <text class="vl" x="190" y="408" fill="var(--third)">Capability</text>
+      <text class="vs" x="290" y="408">Who learns to interpret?</text>
+      <g class="b"><circle cx="140" cy="140" r="17"/><text x="140" y="145" text-anchor="middle">01</text></g>
+      <g class="b"><circle cx="260" cy="112" r="17"/><text x="260" y="117" text-anchor="middle">02</text></g>
+      <g class="b"><circle cx="385" cy="130" r="17"/><text x="385" y="135" text-anchor="middle">03</text></g>
+      <g class="b"><circle cx="400" cy="200" r="17"/><text x="400" y="205" text-anchor="middle">04</text></g>
+      <g class="b"><circle cx="185" cy="245" r="17"/><text x="185" y="250" text-anchor="middle">05</text></g>
+      <rect class="core" x="218" y="180" width="84" height="40" rx="10"/>
+      <text class="coret" x="260" y="197" text-anchor="middle">FRAMING</text><text class="coret" x="260" y="211" text-anchor="middle">LEDGER</text>
+    </svg>
+    <div class="legend">
+      <div class="card"><h3 class="meant">Authority</h3><p style="font-size:14px"><b>01</b> makes questioning the brief a normal step. <b>02</b> asks the least senior person first. <b>05</b> has the senior ask before telling.</p></div>
+      <div class="card"><h3 class="read">Judgment</h3><p style="font-size:14px"><b>02</b> and <b>03</b> replace seniority and taste with shared standards: Toulmin's structure and the ladder. <b>04</b> checks the work against the frame.</p></div>
+      <div class="card"><h3 style="color:var(--third)">Capability</h3><p style="font-size:14px"><b>05</b> turns every review into guided practice, standing in for coaching that gets cut. <b>06</b> sits outside: it protects the time all three need.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="stage">
+  <h3 style="margin-bottom:12px">Sources</h3>
+  <p style="font-size:13.5px;color:var(--muted);margin-bottom:14px">Cited from the published works; check page numbers and wording in your own copies. Netflix facts come from your midterm and journey map files.</p>
+  <ul class="sources">
+    <li>Cialdini, R. Influence: The Psychology of Persuasion</li>
+    <li>Collins, Brown and Newman (1989). Cognitive apprenticeship</li>
+    <li>Dorst, K. (2011). The core of design thinking. Design Studies; Frame Innovation (2015)</li>
+    <li>Edmondson, A. (1999). Psychological safety and learning behavior in work teams</li>
+    <li>Fisher, R. and Ury, W. (1981). Getting to Yes</li>
+    <li>Gioia and Chittipeddi (1991). Sensemaking and sensegiving in strategic change</li>
+    <li>Hall, S. (1973). Encoding and decoding in the television discourse</li>
+    <li>Heinrichs, J. Thank You for Arguing</li>
+    <li>Klein, G. (2007). Performing a project premortem. HBR</li>
+    <li>Kurnoff and Lazarus. Everyday Business Storytelling</li>
+    <li>Malhotra and Bazerman (2007). Negotiation Genius</li>
+    <li>Meyer, P. I. The 4 Pillars of Critical Thinking</li>
+    <li>Minto, B. The Pyramid Principle</li>
+    <li>Mussweiler, Strack and Pfeiffer (2000). Considering the opposite</li>
+    <li>Petty and Cacioppo (1986). Elaboration Likelihood Model</li>
+    <li>Rogers, E. (1962). Diffusion of Innovations</li>
+    <li>Schön, D. (1983). The Reflective Practitioner</li>
+    <li>Toulmin, S. (1958). The Uses of Argument</li>
+    <li>Tversky and Kahneman (1974; 1981). Anchoring; framing of decisions</li>
+    <li>Wedell-Wedellsborg, T. (2017). Are you solving the right problems? HBR</li>
+    <li>Weick, K. (1995). Sensemaking in Organizations</li>
+  </ul>
+</section>
+
+<footer>SBIZ 738 · PINA Toolkit working templates · Aarshi Jain. Your entries save in this browser only.</footer>
+</div>
+
+<script>
+(function(){
+const KEY='pina-stage-templates-v1';
+const EX={
+ s0:{s0_mean:"We have no plans to add ads to Netflix right now.",s0_r1:"Netflix is ad-free today and has no current plans to change that.",s0_r2:"Ad-free for now, but plans can change.",s0_r3:"Netflix promised never to show ads. Period.",s0_c1:false,s0_c2:false,s0_c3:true},
+ s1:{s1_fact:"100M+ households share passwords. About 200,000 members lost in early 2022.",s1_anchor:"Stop password sharing.",s1_position:"Stop password sharing.",s1_assume:"Sharers will pay rather than quit, and will see it as fair.",s1_opposite:"Let people pay to share openly.",s1_interest:"Revenue to keep investing in shows.",s1_people:"Families, students and long-time members",s1_loss:"a habit Netflix itself called love in 2017",s1_reframe:"turning sharers into paying members without making families feel punished"},
+ s2:{s2_see:"helping members find a show in one second",s2_then:"show each person the image most likely to appeal to them",s2_grounds:"Viewers decide from one image, no words. Netflix measured the watch, not the click.",s2_warrant:"The image is the main thing people judge a title by.",s2_q:"Likely",s2_rival:"Netflix is choosing what I see without telling me. It feels like manipulation.",s2_wrong:"Viewers find out how it works and feel targeted. (This happened in 2018.)"},
+ s3:{s3_f1:"62% said they'd quit rather than pay (Jefferies survey)",s3_r1:2,s3_f2:"5.9M members added in the quarter after launch",s3_r2:3,s3_f3:"Country-by-country pilots before the US launch",s3_r3:4,s3_l1:true,s3_l2:true,s3_l3:false,s3_pre:"#CancelNetflix trends. People pay but feel tricked, and the next change costs more trust.",s3_act:"launching paid sharing with a clear reason for viewers",s3_gain:"the shows people love stay funded",s3_gap:"how much goodwill it costs",s3_change:"cancellations stay high after the pilots"},
+ s4:{s4_thread:"Help each viewer find a show they'll enjoy.",s4_c1:true,s4_c2:true,s4_where:"The thumbnail image",s4_c3:false,s4_c4:true,s4_c5:false,s4_yes:"Nothing agreed with viewers",s4_stranger:"\"They're targeting me based on who they think I am.\""},
+ s5:{s5_dec:"Ad tier (2022) and paid sharing (2023)",s5_why:"Revenue growth and an industry-wide shift",s5_not:"Never went back to the 2015 and 2017 statements",s5_open:"What do we owe viewers who trusted \"Period\"?"},
+ s6:{s6_a1:4,s6_a2:2,s6_a3:3,s6_a4:5,s6_a5:2,s6_walk:"A fixed fee that covers two framing rounds",s6_more:"Scope, a shorter timeline, who owns the framing ledger",s6_out:"a tested problem frame and a recommendation you can act on",s6_hours:"120 hours of screens",s6_got:"the framing ledger and handover note from phase one",s6_trial:"one two-week framing sprint",s6_measure:"fewer rework rounds after handoff"}
+};
+const STAGE_KEYS=k=>k.split('_')[0];
+let store={};
+try{store=JSON.parse(localStorage.getItem(KEY)||'null')||null}catch(e){store=null}
+if(!store){store={};Object.values(EX).forEach(o=>Object.assign(store,o));}
+if(!store.ledger){store.ledger=[["Netflix, 2015 statement","No ads on Netflix right now","No ads ever, a promise","No current plans","CEO, in public","Never written down"],["","","","","",""]];}
+const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(store))}catch(e){}};
+
+/* fields */
+const fields=[...document.querySelectorAll('[data-k]')];
+function syncInputs(){fields.forEach(el=>{const v=store[el.dataset.k];
+  if(el.type==='checkbox')el.checked=!!v;
+  else if(el.type==='range')el.value=v||3;
+  else el.value=v==null?'':v;});}
+fields.forEach(el=>el.addEventListener(el.type==='checkbox'||el.type==='range'?'input':'input',()=>{
+  store[el.dataset.k]=el.type==='checkbox'?el.checked:(el.type==='range'?+el.value:el.value);save();render();}));
+
+/* qualifier */
+document.querySelectorAll('[data-qual]').forEach(b=>b.addEventListener('click',()=>{store.s2_q=b.dataset.qual;save();render();}));
+
+/* rungs */
+const RUNGS=["1 Someone said it","2 Many said it","3 We saw it","4 We tested it"];
+document.querySelectorAll('[data-rungs]').forEach(box=>{const i=box.dataset.rungs;
+  RUNGS.forEach((t,n)=>{const b=document.createElement('button');b.textContent=t;b.dataset.r=n+1;b.addEventListener('click',()=>{store['s3_r'+i]=n+1;save();render();});box.appendChild(b);});});
+
+/* examples & clear */
+document.querySelectorAll('[data-example]').forEach(b=>b.addEventListener('click',()=>{Object.assign(store,EX[b.dataset.example]);if(b.dataset.example==='s0'){store.ledger[0]=["Netflix, 2015 statement","No ads on Netflix right now","No ads ever, a promise","No current plans","CEO, in public","Never written down"];buildLedger();}save();syncInputs();render();}));
+document.querySelectorAll('[data-clear]').forEach(b=>b.addEventListener('click',()=>{const s=b.dataset.clear;Object.keys(store).forEach(k=>{if(k!=='ledger'&&STAGE_KEYS(k)===s)delete store[k];});save();syncInputs();render();}));
+
+/* ledger */
+const lb=document.getElementById('ledgerBody');
+function buildLedger(){lb.innerHTML='';store.ledger.forEach((row,ri)=>{const tr=document.createElement('tr');
+  row.forEach((v,ci)=>{const td=document.createElement('td');const ta=document.createElement('textarea');ta.rows=1;ta.value=v;ta.id='lg_'+ri+'_'+ci;ta.setAttribute('aria-label','Ledger row '+(ri+1)+' column '+(ci+1));
+    ta.addEventListener('input',()=>{store.ledger[ri][ci]=ta.value;save();});td.appendChild(ta);tr.appendChild(td);});lb.appendChild(tr);});}
+document.getElementById('addRow').addEventListener('click',()=>{store.ledger.push(["","","","","",""]);save();buildLedger();});
+
+/* hero gap card */
+const GAP=[
+ {y:"Netflix · 2015",s:"\"No advertising coming onto Netflix. Period.\"",m:"We have no plans for ads right now.",r:"No ads, ever. That's a promise."},
+ {y:"Netflix · 2017",s:"\"Love is sharing a password.\"",m:"A playful brand tweet.",r:"Sharing your account is allowed, even encouraged."},
+ {y:"Netflix · artwork",s:"A different thumbnail for each viewer.",m:"We're helping you find a show you'll enjoy.",r:"They're targeting me based on who they think I am."}
+];
+let gi=0,gm=true;const tgM=document.getElementById('tgM'),tgR=document.getElementById('tgR');
+function renderGap(){const g=GAP[gi];document.getElementById('gapYear').textContent=g.y;document.getElementById('gapStmt').textContent=g.s;
+  const rd=document.getElementById('gapReading');rd.className='reading '+(gm?'m':'r');
+  rd.querySelector('.who').textContent=gm?'Meant':'Read';rd.querySelector('.who').className='who '+(gm?'meant':'read');
+  document.getElementById('gapText').textContent=gm?g.m:g.r;tgM.setAttribute('aria-pressed',gm);tgR.setAttribute('aria-pressed',!gm);}
+tgM.onclick=()=>{gm=true;renderGap()};tgR.onclick=()=>{gm=false;renderGap()};
+document.getElementById('gapNext').onclick=()=>{gi=(gi+1)%GAP.length;gm=true;renderGap()};
+
+/* svg helper */
+const NS='http://www.w3.org/2000/svg';
+const el=(t,a,txt)=>{const e=document.createElementNS(NS,t);for(const k in a)e.setAttribute(k,a[k]);if(txt!=null)e.textContent=txt;return e;};
+
+/* ladder */
+const ladder=document.getElementById('ladderSvg');const RY={4:40,3:110,2:180,1:250};
+function renderLadder(){ladder.innerHTML='';
+  ladder.appendChild(el('line',{class:'rail',x1:30,y1:14,x2:30,y2:300}));ladder.appendChild(el('line',{class:'rail',x1:130,y1:14,x2:130,y2:300}));
+  [1,2,3,4].forEach(r=>{ladder.appendChild(el('line',{class:'rung',x1:30,y1:RY[r],x2:130,y2:RY[r]}));
+    ladder.appendChild(el('text',{class:'rl',x:142,y:RY[r]+4},['','said','many said','saw it','tested'][r]));});
+  ladder.appendChild(el('text',{class:'rl',x:0,y:322},'weak'));ladder.appendChild(el('text',{class:'rl',x:0,y:10},'strong'));
+  [1,2,3].forEach(i=>{const r=store['s3_r'+i];if(!r||!store['s3_f'+i])return;
+    const x=48+(i-1)*32;ladder.appendChild(el('circle',{class:'dot',cx:x,cy:RY[r]-14,r:12}));
+    ladder.appendChild(el('text',{class:'dl',x:x,y:RY[r]-10,'text-anchor':'middle'},'F'+i));});
+  document.querySelectorAll('[data-rungs]').forEach(box=>{const v=store['s3_r'+box.dataset.rungs];box.querySelectorAll('button').forEach(b=>b.setAttribute('aria-pressed',+b.dataset.r===v));});
+  let best=0,bi=0;[1,2,3].forEach(i=>{const r=store['s3_r'+i]||0;if(store['s3_f'+i]&&r>best){best=r;bi=i;}});
+  store.s3_best=bi?store['s3_f'+bi].replace(/\s*\(.*\)$/,'')+' (rung '+best+')':'';}
+
+/* thread */
+const thread=document.getElementById('threadSvg');const PX=[50,200,350,500,650],PL=['Restated','Visible','Stranger','Picture','Past yes'];
+function renderThread(){thread.innerHTML='';const ok=i=>!!store['s4_c'+(i+1)];
+  for(let i=0;i<4;i++){const a=PX[i],b=PX[i+1];thread.appendChild(el('path',{class:'seg '+(ok(i)&&ok(i+1)?'ok':'broken'),d:`M${a} 48 Q${(a+b)/2} ${i%2?20:76} ${b} 48`}));}
+  PX.forEach((x,i)=>{thread.appendChild(el('circle',{class:'pin '+(ok(i)?'ok':'no'),cx:x,cy:48,r:10}));thread.appendChild(el('text',{class:'pl',x:x,y:96,'text-anchor':'middle'},PL[i]));});
+  document.getElementById('s4_echo').textContent=store.s4_thread||'Copy your thread above';}
+
+/* loop */
+const LOOP=[
+ {n:'1',t:'Junior explains',q:'"Walk me through why this solves the problem we framed."',d:'The person who made the work speaks first and gives their reasons. This is articulation, the step that builds judgment.'},
+ {n:'2',t:'Judge vs. criteria',q:'"Does it pass the thread and the ledger criteria?"',d:'Judge against what was agreed, not personal taste. Objective criteria keep the review about the work.'},
+ {n:'3',t:'Ask, then model',q:'"What else did you consider?" then "Here is how I would think about it."',d:'The senior asks questions first, then explains their own reasoning out loud. Coaching, then modeling.'},
+ {n:'4',t:'Assume missing info',q:'"What didn\'t you have that would have changed this?"',d:'Before blaming anyone, look for what was never shared. Then fix the record. This is Hanlon\'s Razor in practice.'},
+ {n:'5',t:'Reflect together',q:'"What would we frame differently next time?"',d:'Close by naming one lesson for the next project. Reflection turns one review into lasting capability.'}
+];
+let li=0;const loop=document.getElementById('loopSvg');
+function renderLoop(){loop.innerHTML='';const cx=160,cy=160,R=110;
+  loop.appendChild(el('circle',{class:'ring',cx,cy,r:R}));
+  loop.appendChild(el('text',{class:'center',x:cx,y:cy-4,'text-anchor':'middle'},'Every review'));
+  loop.appendChild(el('text',{class:'center',x:cx,y:cy+16,'text-anchor':'middle'},'is a lesson'));
+  LOOP.forEach((s,i)=>{const a=(-90+i*72)*Math.PI/180,x=cx+R*Math.cos(a),y=cy+R*Math.sin(a);
+    const am=(-90+i*72+36)*Math.PI/180;loop.appendChild(el('circle',{class:'ring-arrow',cx:cx+R*Math.cos(am),cy:cy+R*Math.sin(am),r:3}));
+    const g=el('g',{class:'ln'+(i===li?' on':''),tabindex:0,role:'button','aria-label':s.t});
+    g.appendChild(el('circle',{cx:x,cy:y,r:20}));g.appendChild(el('text',{x:x,y:y+5,'text-anchor':'middle'},s.n));
+    const lx=cx+(R+42)*Math.cos(a),ly=cy+(R+40)*Math.sin(a);
+    const anchor=Math.abs(Math.cos(a))<.3?'middle':(Math.cos(a)>0?'start':'end');
+    const off=anchor==='start'?-14:anchor==='end'?14:0;
+    loop.appendChild(el('text',{class:'ll',x:lx+off,y:ly+4,'text-anchor':anchor},s.t));
+    const pick=()=>{li=i;renderLoop()};g.addEventListener('click',pick);g.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();pick();}});
+    loop.appendChild(g);});
+  const s=LOOP[li];document.getElementById('sayBox').innerHTML='<span class="eyebrow">Move '+s.n+' of 5 · tap the loop to step through</span><p class="q"></p><p style="color:var(--muted)"></p>';
+  const sb=document.getElementById('sayBox');sb.querySelector('.q').textContent=s.q;sb.querySelectorAll('p')[1].textContent=s.d;}
+
+/* flip */
+const flip=document.getElementById('flip');const doFlip=()=>{flip.classList.toggle('on');flip.setAttribute('aria-pressed',flip.classList.contains('on'));};
+flip.addEventListener('click',doFlip);flip.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();doFlip();}});
+
+/* radar */
+const radar=document.getElementById('radarSvg');const AX=['Advantage','Fit','Simplicity','Trial','Visibility'];
+const TIPS=['Show the advantage in the client\'s terms: less rework, faster decisions.','Match how they already buy: offer the new model as a line item inside their usual contract.','Cut it to one sentence. If you need a slide to explain the pricing, it is too complex.','Offer a small first step, like one framing sprint, so they can try before committing.','Make results visible: show the ledger, the rework you avoided, the decision it enabled.'];
+function renderRadar(){radar.innerHTML='';const cx=150,cy=152,R=92;const pt=(i,v)=>{const a=(-90+i*72)*Math.PI/180;return[cx+R*v/5*Math.cos(a),cy+R*v/5*Math.sin(a)];};
+  [1,2,3,4,5].forEach(l=>radar.appendChild(el('polygon',{class:'grid',points:AX.map((_,i)=>pt(i,l).join(',')).join(' ')})));
+  AX.forEach((t,i)=>{const[x,y]=pt(i,5);radar.appendChild(el('line',{class:'axis',x1:cx,y1:cy,x2:x,y2:y}));
+    const[lx,ly]=pt(i,6.3);radar.appendChild(el('text',{class:'al',x:lx,y:ly+4,'text-anchor':Math.abs(lx-cx)<10?'middle':(lx>cx?'start':'end')},t));});
+  const vals=AX.map((_,i)=>store['s6_a'+(i+1)]||3);const min=Math.min(...vals),wi=vals.indexOf(min);
+  radar.appendChild(el('polygon',{class:'shape',points:vals.map((v,i)=>pt(i,v).join(',')).join(' ')}));
+  vals.forEach((v,i)=>{const[x,y]=pt(i,v);radar.appendChild(el('circle',{class:i===wi?'weak':'vd',cx:x,cy:y,r:i===wi?6:4}));document.getElementById('o_a'+(i+1)).textContent=v;});
+  document.getElementById('radarTip').innerHTML='<b>Weakest: '+AX[wi]+'.</b> '+TIPS[wi];}
+
+/* outputs */
+function render(){
+  renderLadder();renderThread();renderRadar();
+  document.querySelectorAll('[data-qual]').forEach(b=>b.setAttribute('aria-pressed',b.dataset.qual===store.s2_q));
+  document.querySelectorAll('[data-out]').forEach(s=>{const v=(store[s.dataset.out]||'').toString().trim().replace(/[.\s]+$/,'');
+    if(v){s.textContent=v;s.classList.remove('empty')}else{s.textContent=s.dataset.ph;s.classList.add('empty')}});
+}
+syncInputs();buildLedger();renderGap();renderLoop();render();
+})();
+</script>
+
+</body></html>

@@ -6,7 +6,7 @@ PINA is an interactive toolkit for thinking through briefs, understanding people
 
 Pip, PINA's folded-paper guide, helps you explore the toolkit. When connected to its AI backend, Ask Pip can explain concepts, suggest a starting point and help draft ideas for you to review.
 
-[Open the hosted toolkit](https://pina-fieldguide.vivek-kr-jain.chatgpt.site/)
+[Open Aarshi Jain’s PINA Toolkit](https://aarshijain.github.io/PINA-Toolkit/)
 
 ## How to use it
 
@@ -58,7 +58,7 @@ It can be opened locally without running the backend. Ask Pip's AI features requ
 
 ## GitHub Pages
 
-The `docs/` folder contains the public static website. In repository **Settings → Pages**, choose **Deploy from a branch**, branch **main**, folder **/docs**, and save.
+The root `index.html` opens the toolkit at https://aarshijain.github.io/PINA-Toolkit/. It loads its assets from `docs/`. GitHub Pages is published from **main / (root)**; publishing from **main /docs** also serves the complete interface.
 
 After editing the frontend in `dist/`, regenerate the published copy and commit the updated `docs/` folder:
 
@@ -66,7 +66,7 @@ After editing the frontend in `dist/`, regenerate the published copy and commit 
 npm run build:pages
 ```
 
-The static deployment includes all manual tools. Live Ask Pip remains available through the hosted toolkit linked above until an AI backend is connected to this deployment.
+The static deployment includes all manual tools. Live Ask Pip remains available in the [AI-enabled edition](https://pina-fieldguide.vivek-kr-jain.chatgpt.site/) until an AI backend is connected to the GitHub Pages deployment.
 
 ## Connect Ask Pip
 
